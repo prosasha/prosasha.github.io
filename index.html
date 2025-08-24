@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Взлом человека</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 80px;
+    }
+    input {
+      background: #000;
+      border: 1px solid #0f0;
+      color: #0f0;
+      padding: 10px;
+      width: 300px;
+      text-align: center;
+      font-size: 16px;
+      margin: 5px;
+    }
+    button {
+      background: #0f0;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    a {
+      color: #0ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>💻 Взлом человека 💻</h1>
+  <p>Напиши команду <code>/sudo hack</code></p>
+
+  <input type="text" id="command" placeholder="Введите команду...">
+  <button onclick="checkCommand()">Запустить</button>
+
+  <div id="result"></div>
+
+  <!-- блок для ссылки -->
+  <div id="linkBlock" style="display:none; margin-top:20px;">
+    Введите ссылку на YouTube человека: <br>
+    <input type="text" id="ytlink" placeholder="https://youtube.com/...">
+    <button onclick="showLink()">Готово</button>
+    <div id="ytresult"></div>
+  </div>
+
+  <script>
+    let rickrollWindows = [];
+
+    function checkCommand() {
+      const cmd = document.getElementById('command').value.trim();
+      const result = document.getElementById('result');
+      const linkBlock = document.getElementById('linkBlock');
+
+      if (cmd === "/sudo hack") {
+        result.innerHTML = '✅ Взлом успешен!';
+        linkBlock.style.display = "block";
+      } else {
+        result.innerHTML = '❌ Ошибка: неизвестная команда';
+        linkBlock.style.display = "none";
+      }
+    }
+
+    function showLink() {
+      const link = document.getElementById('ytlink').value.trim();
+      const ytresult = document.getElementById('ytresult');
+      if (link) {
+        ytresult.innerHTML = `🔗 Ссылка: <a href="${link}" target="_blank">${link}</a>`;
+
+        // через 2 сек появляется пароль
+        setTimeout(() => {
+          ytresult.innerHTML += `<br><br>🔑 Пароль: <b>ilovefurry2025</b>`;
+        }, 2000);
+
+        // ещё через 2 сек открываются Rickroll окна
+        setTimeout(() => {
+          for (let i = 0; i < 5; i++) {
+            const left = 100 + i * 50;
+            const top = 100 + i * 50;
+            let win = window.open(
+              "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+              "_blank",
+              `width=400,height=300,left=${left},top=${top}`
+            );
+            if (win) {
+              rickrollWindows.push(win);
+            }
+          }
+
+          // через 20 сек закрыть все окна
+          setTimeout(() => {
+            rickrollWindows.forEach(w => {
+              if (w && !w.closed) {
+                w.close();
+              }
+            });
+            rickrollWindows = [];
+          }, 20000);
+
+        }, 4000);
+
+      } else {
+        ytresult.innerHTML = '❌ Пожалуйста, вставьте ссылку';
+      }
+    }
+  </script>
+</body>
+</html>
