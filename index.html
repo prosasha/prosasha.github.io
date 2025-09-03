@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Обо мне – TheSasha</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #161b22;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    p {
+      margin: 5px 0 15px;
+      font-size: 16px;
+      color: #9da5b4;
+    }
+    a, button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      background: #238636;
+      color: white;
+      font-weight: bold;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    a:hover, button:hover {
+      background: #2ea043;
+    }
+    #copied {
+      color: #3fb950;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>TheSasha</h1>
+    <p>Привет! Здесь ссылки, где меня можно найти:</p>
+    <a href="https://github.com/prosasha" target="_blank">GitHub</a>
+    <a href="https://www.youtube.com/@THEISSasha23" target="_blank">YouTube</a>
+    <button onclick="copyDiscord()">Скопировать Discord</button>
+    <p id="copied">Скопировано: sashak5656 ✅</p>
+  </div>
+
+  <script>
+    function copyDiscord() {
+      navigator.clipboard.writeText("sashak5656").then(() => {
+        document.getElementById("copied").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("copied").style.display = "none";
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
