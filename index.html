@@ -63,7 +63,7 @@
             margin: 15px 0;
         }
         
-        .registration-form {
+        .status-control {
             border: 2px solid white;
             padding: 20px;
             margin-top: 30px;
@@ -72,55 +72,58 @@
             background-size: 50px 50px;
             border-radius: 5px;
             max-width: 500px;
-            text-align: left;
         }
         
-        .form-group {
-            margin-bottom: 15px;
+        .status-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
         
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
+        .online {
+            background-color: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
         }
         
-        .form-group input {
-            width: 100%;
+        .offline {
+            background-color: #f44336;
+            box-shadow: 0 0 10px #f44336;
+        }
+        
+        .admin-login {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+        }
+        
+        .admin-input {
+            width: 200px;
             padding: 8px;
+            margin: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: rgba(255, 255, 255, 0.9);
         }
         
-        .register-btn {
+        .admin-btn {
             background-color: #2196F3;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
-            width: 100%;
+            margin: 5px;
         }
         
-        .register-btn:hover {
+        .admin-btn:hover {
             background-color: #0b7dda;
         }
         
-        .message {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 5px;
+        .hidden {
             display: none;
-        }
-        
-        .success {
-            background-color: rgba(76, 175, 80, 0.3);
-            border: 1px solid #4CAF50;
-        }
-        
-        .error {
-            background-color: rgba(244, 67, 54, 0.3);
-            border: 1px solid #f44336;
         }
     </style>
 </head>
@@ -133,73 +136,101 @@
             <p class="ip-address">Server IP Address: max-protocols.gl.at.ply.gg:46093</p>
             <p>Client: 2010L</p>
             <p>Map: 2010M - Work at a Pizza Place.rbxl</p>
-            <p>Players: 12</p>
+            <p>Players: <span id="playersCount">12</span></p>
             <p>Version: Novetus Snapshot v25.9395.1</p>
+            <p>Status: 
+                <span class="status-indicator online" id="statusIndicator"></span>
+                <span id="statusText">Online</span>
+            </p>
         </div>
         
-        <div class="registration-form">
-            <h3>Безопасная регистрация</h3>
-            <form id="regForm">
-                <div class="form-group">
-                    <label for="username">Имя пользователя:</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Пароль:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="register-btn">Зарегистрироваться</button>
-            </form>
-            <div id="message" class="message"></div>
+        <div class="status-control">
+            <h3>Управление статусом сервера</h3>
+            <div class="admin-login" id="adminLogin">
+                <p>Введите пароль администратора:</p>
+                <input type="password" class="admin-input" id="adminPassword" placeholder="Пароль">
+                <button class="admin-btn" onclick="checkAdmin()">Войти</button>
+            </div>
+            
+            <div id="adminPanel" class="hidden">
+                <p>Панель администратора</p>
+                <button class="admin-btn" onclick="setOnline()">Включить сервер</button>
+                <button class="admin-btn" onclick="setOffline()">Выключить сервер</button>
+                <button class="admin-btn" onclick="logout()">Выйти</button>
+            </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('regForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const messageDiv = document.getElementById('message');
-            
-            // Простая безопасная проверка
-            if (password.length < 6) {
-                showMessage('Пароль должен содержать минимум 6 символов', 'error');
+        // Пароль администратора (можно изменить)
+        const ADMIN_PASSWORD = "admin123";
+        let isAdmin = false;
+        
+        // Проверка пароля администратора
+        function checkAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.getElementById('adminLogin').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('adminPassword').value = '';
+            } else {
+                alert('Неверный пароль!');
+            }
+        }
+        
+        // Выход из панели администратора
+        function logout() {
+            isAdmin = false;
+            document.getElementById('adminLogin').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+        }
+        
+        // Установить статус "Online"
+        function setOnline() {
+            if (!isAdmin) {
+                alert('Требуется авторизация администратора!');
                 return;
             }
             
-            if (!validateEmail(email)) {
-                showMessage('Введите корректный email', 'error');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const playersCount = document.getElementById('playersCount');
+            
+            statusIndicator.className = 'status-indicator online';
+            statusText.textContent = 'Online';
+            playersCount.textContent = '12';
+            
+            // Здесь можно добавить код для реального включения сервера
+            console.log('Сервер включен администратором');
+        }
+        
+        // Установить статус "Offline"
+        function setOffline() {
+            if (!isAdmin) {
+                alert('Требуется авторизация администратора!');
                 return;
             }
             
-            // Имитация безопасной регистрации
-            showMessage('Регистрация успешна! Данные защищены.', 'success');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const playersCount = document.getElementById('playersCount');
             
-            // Очистка формы
-            document.getElementById('regForm').reset();
+            statusIndicator.className = 'status-indicator offline';
+            statusText.textContent = 'Offline';
+            playersCount.textContent = '0';
+            
+            // Здесь можно добавить код для реального выключения сервера
+            console.log('Сервер выключен администратором');
+        }
+        
+        // Защита от случайного закрытия панели
+        window.addEventListener('beforeunload', function(e) {
+            if (isAdmin) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
         });
-        
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = text;
-            messageDiv.className = 'message ' + type;
-            messageDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
-        }
-        
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
     </script>
 </body>
 </html>
