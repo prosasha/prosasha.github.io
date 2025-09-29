@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work a Pizza Place - Roblox Server</title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
             font-family: Arial, sans-serif;
             background-color: #808080;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4zwAEjP8RgCHCMDMzQ4QZGBj+M8IJM0JpZkY4YYYIAAATYgQc/ZhC+AAAAABJRU5ErkJggg==');
-            background-size: 100px 100px;
+            background-image: url('Stud.png');
+            background-size: 50px 50px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -23,307 +19,263 @@
             min-height: 100vh;
             color: white;
             text-align: center;
-            padding: 20px;
         }
         
         .container {
             max-width: 800px;
-            width: 100%;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         
         .icon {
             width: 200px;
             height: 200px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
         
         h1 {
-            font-size: 2.8em;
-            margin-bottom: 40px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(to right, #ffffff, #e0e0e0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            padding: 0 10px;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         .server-info {
-            border: 3px solid white;
-            padding: 25px;
+            border: 2px solid white;
+            padding: 20px;
             margin-top: 20px;
-            background-color: rgba(40, 40, 40, 0.7);
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4zwAEjP8RgCHCMDMzQ4QZGBj+M8IJM0JpZkY4YYYIAAATYgQc/ZhC+AAAAABJRU5ErkJggg==');
-            background-size: 100px 100px;
-            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            background-image: url('Stud.png');
+            background-size: 50px 50px;
+            border-radius: 5px;
             text-align: left;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            margin-bottom: 40px;
+            max-width: 500px;
         }
         
         .server-info p {
-            margin: 15px 0;
-            font-size: 1.2em;
-            line-height: 1.5;
+            margin: 10px 0;
+            font-size: 1.1em;
         }
         
         .ip-address {
             font-weight: bold;
-            font-size: 1.4em;
-            margin: 20px 0;
-            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        
+        .chat-section {
+            border: 2px solid white;
+            padding: 20px;
+            margin-top: 30px;
             background-color: rgba(0, 0, 0, 0.3);
-            padding: 10px;
+            background-image: url('Stud.png');
+            background-size: 50px 50px;
             border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 500px;
+            text-align: left;
         }
         
-        .version {
-            color: #a0d0ff;
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
         
-        .players {
-            color: #90ee90;
+        .chat-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .send-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .send-btn:hover {
+            background-color: #45a049;
         }
         
         .registration-form {
-            border: 3px solid white;
-            padding: 25px;
-            background-color: rgba(40, 40, 40, 0.7);
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4zwAEjP8RgCHCMDMzQ4QZGBj+M8IJM0JpZkY4YYYIAAATYgQc/ZhC+AAAAABJRU5ErkJggg==');
-            background-size: 100px 100px;
-            border-radius: 10px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
-        }
-        
-        .registration-form h2 {
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            border: 2px solid white;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.3);
+            background-image: url('Stud.png');
+            background-size: 50px 50px;
+            border-radius: 5px;
+            max-width: 500px;
+            text-align: left;
         }
         
         .form-group {
-            margin-bottom: 20px;
-            text-align: left;
+            margin-bottom: 15px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
+            margin-bottom: 5px;
         }
         
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
-            padding: 12px;
-            border-radius: 5px;
+            padding: 8px;
             border: 1px solid #ccc;
+            border-radius: 5px;
             background-color: rgba(255, 255, 255, 0.9);
-            font-size: 1em;
         }
         
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #4d90fe;
-            box-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
-        }
-        
-        .submit-btn {
-            background-color: #4CAF50;
+        .register-btn {
+            background-color: #2196F3;
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1.1em;
             width: 100%;
-            transition: background-color 0.3s;
-            font-weight: bold;
         }
         
-        .submit-btn:hover {
-            background-color: #45a049;
+        .register-btn:hover {
+            background-color: #0b7dda;
         }
         
         .message {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 10px;
+            padding: 10px;
             border-radius: 5px;
             display: none;
         }
         
         .success {
-            background-color: rgba(76, 175, 80, 0.2);
+            background-color: rgba(76, 175, 80, 0.3);
             border: 1px solid #4CAF50;
-            color: #90ee90;
         }
         
         .error {
-            background-color: rgba(244, 67, 54, 0.2);
+            background-color: rgba(244, 67, 54, 0.3);
             border: 1px solid #f44336;
-            color: #ff8a80;
-        }
-        
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2em;
-            }
-            
-            .server-info p {
-                font-size: 1em;
-            }
-            
-            .icon {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .registration-form {
-                padding: 15px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Замените src на "Icon.jpg" после загрузки файла -->
-        <img src="https://via.placeholder.com/200/555555/ffffff?text=Icon.jpg" alt="Work a Pizza Place Icon" class="icon">
+        <img src="Icon.jpg" alt="Work a Pizza Place Icon" class="icon">
         <h1>Work a Pizza Place</h1>
         
         <div class="server-info">
             <p class="ip-address">Server IP Address: max-protocols.gl.at.ply.gg:46093</p>
-            <p><strong>Client:</strong> 2010L</p>
-            <p><strong>Map:</strong> 2010M - Work at a Pizza Place.rbxl</p>
-            <p class="players"><strong>Players:</strong> 12</p>
-            <p class="version"><strong>Version:</strong> Novetus Snapshot v25.9395.1</p>
+            <p>Client: 2010L</p>
+            <p>Map: 2010M - Work at a Pizza Place.rbxl</p>
+            <p>Players: 12</p>
+            <p>Version: Novetus Snapshot v25.9395.1</p>
+        </div>
+        
+        <div class="chat-section">
+            <h3>Чат сервера</h3>
+            <div class="chat-messages" id="chatMessages">
+                <div>Добро пожаловать на сервер!</div>
+                <div>Сервер онлайн и работает стабильно</div>
+                <div>Присоединяйтесь к игре!</div>
+            </div>
+            <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение...">
+            <button class="send-btn" onclick="sendMessage()">Отправить</button>
         </div>
         
         <div class="registration-form">
-            <h2>Регистрация на сервере</h2>
-            <form id="registrationForm">
+            <h3>Безопасная регистрация</h3>
+            <form id="regForm">
                 <div class="form-group">
                     <label for="username">Имя пользователя:</label>
-                    <input type="text" id="username" name="username" required placeholder="Введите ваше имя пользователя">
+                    <input type="text" id="username" name="username" required>
                 </div>
-                
                 <div class="form-group">
-                    <label for="email">Электронная почта:</label>
-                    <input type="email" id="email" name="email" required placeholder="Введите вашу электронную почту">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
-                
                 <div class="form-group">
                     <label for="password">Пароль:</label>
-                    <input type="password" id="password" name="password" required placeholder="Введите пароль">
+                    <input type="password" id="password" name="password" required>
                 </div>
-                
-                <div class="form-group">
-                    <label for="confirmPassword">Подтвердите пароль:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Повторите пароль">
-                </div>
-                
-                <div class="form-group">
-                    <label for="role">Роль на сервере:</label>
-                    <select id="role" name="role" required>
-                        <option value="" disabled selected>Выберите роль</option>
-                        <option value="cook">Повар</option>
-                        <option value="cashier">Кассир</option>
-                        <option value="delivery">Доставщик</option>
-                        <option value="manager">Менеджер</option>
-                        <option value="supplier">Поставщик</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="experience">Опыт в Roblox:</label>
-                    <select id="experience" name="experience" required>
-                        <option value="" disabled selected>Выберите опыт</option>
-                        <option value="beginner">Начинающий (менее 1 года)</option>
-                        <option value="intermediate">Средний (1-3 года)</option>
-                        <option value="advanced">Продвинутый (более 3 лет)</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="submit-btn">Зарегистрироваться</button>
+                <button type="submit" class="register-btn">Зарегистрироваться</button>
             </form>
-            
             <div id="message" class="message"></div>
         </div>
     </div>
 
     <script>
-        // Простой скрипт для имитации изменения количества игроков
-        document.addEventListener('DOMContentLoaded', function() {
-            const playersElement = document.querySelector('.players');
-            let players = 12;
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const message = input.value.trim();
             
-            setInterval(() => {
-                // Случайное изменение количества игроков от 8 до 16
-                players = 8 + Math.floor(Math.random() * 9);
-                playersElement.innerHTML = `<strong>Players:</strong> ${players}`;
-            }, 10000); // Обновление каждые 10 секунд
-            
-            // Обработка формы регистрации
-            const registrationForm = document.getElementById('registrationForm');
-            const messageDiv = document.getElementById('message');
-            
-            registrationForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Получаем значения полей
-                const username = document.getElementById('username').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                const role = document.getElementById('role').value;
-                const experience = document.getElementById('experience').value;
-                
-                // Простая валидация
-                if (password !== confirmPassword) {
-                    showMessage('Пароли не совпадают!', 'error');
-                    return;
-                }
-                
-                if (password.length < 6) {
-                    showMessage('Пароль должен содержать не менее 6 символов!', 'error');
-                    return;
-                }
-                
-                // Имитация отправки данных на сервер
-                showMessage('Регистрация успешно завершена! Добро пожаловать на сервер!', 'success');
-                
-                // Очистка формы
-                registrationForm.reset();
-                
-                // Имитация перенаправления на страницу сервера
-                setTimeout(() => {
-                    alert(`Добро пожаловать, ${username}! Теперь вы можете присоединиться к серверу.`);
-                }, 1500);
-            });
-            
-            function showMessage(text, type) {
-                messageDiv.textContent = text;
-                messageDiv.className = 'message ' + type;
-                messageDiv.style.display = 'block';
-                
-                // Скрыть сообщение через 5 секунд
-                setTimeout(() => {
-                    messageDiv.style.display = 'none';
-                }, 5000);
+            if (message) {
+                const newMessage = document.createElement('div');
+                newMessage.textContent = message;
+                messages.appendChild(newMessage);
+                input.value = '';
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+        
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
+        
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            // Простая безопасная проверка
+            if (password.length < 6) {
+                showMessage('Пароль должен содержать минимум 6 символов', 'error');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showMessage('Введите корректный email', 'error');
+                return;
+            }
+            
+            // Имитация безопасной регистрации
+            showMessage('Регистрация успешна! Данные защищены.', 'success');
+            
+            // Очистка формы
+            document.getElementById('regForm').reset();
+        });
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
     </script>
 </body>
 </html>
