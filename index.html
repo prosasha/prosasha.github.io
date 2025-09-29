@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work a Pizza Place - Roblox Server</title>
+    <title>Work a Pizza Place - Novetus Server</title>
     <style>
         body {
             margin: 0;
@@ -19,7 +19,6 @@
             min-height: 100vh;
             color: white;
             text-align: center;
-            transition: all 0.3s ease;
         }
         
         .container {
@@ -62,51 +61,6 @@
             font-weight: bold;
             font-size: 1.2em;
             margin: 15px 0;
-        }
-        
-        .chat-section {
-            border: 2px solid white;
-            padding: 20px;
-            margin-top: 30px;
-            background-color: rgba(0, 0, 0, 0.3);
-            background-image: url('TextureStud.png');
-            background-size: 50px 50px;
-            border-radius: 5px;
-            max-width: 500px;
-            text-align: left;
-        }
-        
-        .chat-messages {
-            height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-        }
-        
-        .chat-input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .send-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-        
-        .send-btn:hover {
-            background-color: #45a049;
         }
         
         .registration-form {
@@ -168,55 +122,6 @@
             background-color: rgba(244, 67, 54, 0.3);
             border: 1px solid #f44336;
         }
-        
-        .texture-controls {
-            border: 2px solid white;
-            padding: 15px;
-            margin-top: 20px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            max-width: 500px;
-        }
-        
-        .color-picker {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 15px 0;
-            flex-wrap: wrap;
-        }
-        
-        .color-option {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid white;
-            transition: transform 0.2s;
-        }
-        
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-        
-        .texture-option {
-            padding: 8px 15px;
-            margin: 5px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 1px solid white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .texture-option:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .texture-option.active {
-            background-color: #2196F3;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -230,35 +135,6 @@
             <p>Map: 2010M - Work at a Pizza Place.rbxl</p>
             <p>Players: 12</p>
             <p>Version: Novetus Snapshot v25.9395.1</p>
-        </div>
-        
-        <div class="texture-controls">
-            <h3>Настройки фона</h3>
-            <div class="color-picker">
-                <div class="color-option" style="background-color: #808080;" onclick="changeBackgroundColor('#808080')"></div>
-                <div class="color-option" style="background-color: #556B2F;" onclick="changeBackgroundColor('#556B2F')"></div>
-                <div class="color-option" style="background-color: #8B4513;" onclick="changeBackgroundColor('#8B4513')"></div>
-                <div class="color-option" style="background-color: #2F4F4F;" onclick="changeBackgroundColor('#2F4F4F')"></div>
-                <div class="color-option" style="background-color: #483D8B;" onclick="changeBackgroundColor('#483D8B')"></div>
-                <div class="color-option" style="background-color: #8B0000;" onclick="changeBackgroundColor('#8B0000')"></div>
-            </div>
-            <div>
-                <div class="texture-option active" onclick="changeTexture('brick')">Кирпичная</div>
-                <div class="texture-option" onclick="changeTexture('metal')">Металлическая</div>
-                <div class="texture-option" onclick="changeTexture('wood')">Деревянная</div>
-                <div class="texture-option" onclick="changeTexture('none')">Без текстуры</div>
-            </div>
-        </div>
-        
-        <div class="chat-section">
-            <h3>Чат сервера</h3>
-            <div class="chat-messages" id="chatMessages">
-                <div>Добро пожаловать на сервер!</div>
-                <div>Сервер онлайн и работает стабильно</div>
-                <div>Присоединяйтесь к игре!</div>
-            </div>
-            <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение...">
-            <button class="send-btn" onclick="sendMessage()">Отправить</button>
         </div>
         
         <div class="registration-form">
@@ -283,65 +159,6 @@
     </div>
 
     <script>
-        // Текстуры в base64
-        const textures = {
-            brick: 'TextureStud.png',
-            metal: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAADCAYAAAC56+k6AAAALElEQVQImWNgYGD4z4AE/kMxI5RmhNP/kZgRSjPCaUY4zQinGeE0I5xmhNMA0UYEA8U4X1YAAAAASUVORK5CYII=',
-            wood: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAEUlEQVQImWP4////fwYGBgYACRIBAWpKBC4AAAAASUVORK5CYII=',
-            none: 'none'
-        };
-
-        let currentColor = '#808080';
-        let currentTexture = 'brick';
-
-        function changeBackgroundColor(color) {
-            currentColor = color;
-            updateBackground();
-        }
-
-        function changeTexture(textureType) {
-            currentTexture = textureType;
-            
-            // Обновляем активную кнопку
-            document.querySelectorAll('.texture-option').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            updateBackground();
-        }
-
-        function updateBackground() {
-            const body = document.body;
-            body.style.backgroundColor = currentColor;
-            
-            if (currentTexture === 'none') {
-                body.style.backgroundImage = 'none';
-            } else {
-                body.style.backgroundImage = `url('${textures[currentTexture]}')`;
-            }
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const messages = document.getElementById('chatMessages');
-            const message = input.value.trim();
-            
-            if (message) {
-                const newMessage = document.createElement('div');
-                newMessage.textContent = message;
-                messages.appendChild(newMessage);
-                input.value = '';
-                messages.scrollTop = messages.scrollHeight;
-            }
-        }
-        
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-        
         document.getElementById('regForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
