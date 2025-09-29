@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,17 +63,6 @@
             margin: 15px 0;
         }
         
-        .status-control {
-            border: 2px solid white;
-            padding: 20px;
-            margin-top: 30px;
-            background-color: rgba(0, 0, 0, 0.3);
-            background-image: url('TextureStud.png');
-            background-size: 50px 50px;
-            border-radius: 5px;
-            max-width: 500px;
-        }
-        
         .status-indicator {
             display: inline-block;
             width: 20px;
@@ -92,38 +81,15 @@
             box-shadow: 0 0 10px #f44336;
         }
         
-        .admin-login {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.5);
+        .server-status {
+            border: 2px solid white;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.3);
+            background-image: url('TextureStud.png');
+            background-size: 50px 50px;
             border-radius: 5px;
-        }
-        
-        .admin-input {
-            width: 200px;
-            padding: 8px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .admin-btn {
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        
-        .admin-btn:hover {
-            background-color: #0b7dda;
-        }
-        
-        .hidden {
-            display: none;
+            max-width: 500px;
         }
     </style>
 </head>
@@ -138,97 +104,35 @@
             <p>Map: 2010M - Work at a Pizza Place.rbxl</p>
             <p>Players: 12</p>
             <p>Version: Novetus Snapshot v25.9395.1</p>
-            <p>Status: 
-                <span class="status-indicator online" id="statusIndicator"></span>
-                <span id="statusText">Online</span>
-            </p>
         </div>
         
-        <div class="status-control">
-            <h3>Управление статусом сервера</h3>
-            <div class="admin-login" id="adminLogin">
-                <p>Введите пароль администратора:</p>
-                <input type="password" class="admin-input" id="adminPassword" placeholder="Пароль">
-                <button class="admin-btn" onclick="checkAdmin()">Войти</button>
-            </div>
-            
-            <div id="adminPanel" class="hidden">
-                <p>Панель администратора</p>
-                <button class="admin-btn" onclick="setOnline()">Включить сервер</button>
-                <button class="admin-btn" onclick="setOffline()">Выключить сервер</button>
-                <button class="admin-btn" onclick="logout()">Выйти</button>
-            </div>
+        <div class="server-status">
+            <h3>Server Status</h3>
+            <p>
+                <span class="status-indicator online" id="statusIndicator"></span>
+                <span id="statusText">Server is Online</span>
+            </p>
+            <p>Join now and start working at the pizza place!</p>
         </div>
     </div>
 
     <script>
-        // Пароль администратора (можно изменить)
-        const ADMIN_PASSWORD = "QQWWEE22";
-        let isAdmin = false;
-        
-        // Проверка пароля администратора
-        function checkAdmin() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === ADMIN_PASSWORD) {
-                isAdmin = true;
-                document.getElementById('adminLogin').classList.add('hidden');
-                document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('adminPassword').value = '';
+        // Simple status display for all visitors
+        // The actual server control is handled separately by the admin
+        document.addEventListener('DOMContentLoaded', function() {
+            // You can update this status manually when you start/stop the server
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            // Default status - change this when you start/stop your server
+            const serverOnline = true; // Set to false when server is offline
+            
+            if (serverOnline) {
+                statusIndicator.className = 'status-indicator online';
+                statusText.textContent = 'Server is Online';
             } else {
-                alert('Неверный пароль!');
-            }
-        }
-        
-        // Выход из панели администратора
-        function logout() {
-            isAdmin = false;
-            document.getElementById('adminLogin').classList.remove('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
-        }
-        
-        // Установить статус "Online"
-        function setOnline() {
-            if (!isAdmin) {
-                alert('Требуется авторизация администратора!');
-                return;
-            }
-            
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            const playersCount = document.getElementById('playersCount');
-            
-            statusIndicator.className = 'status-indicator online';
-            statusText.textContent = 'Online';
-            playersCount.textContent = '12';
-            
-            // Здесь можно добавить код для реального включения сервера
-            console.log('Сервер включен администратором');
-        }
-        
-        // Установить статус "Offline"
-        function setOffline() {
-            if (!isAdmin) {
-                alert('Требуется авторизация администратора!');
-                return;
-            }
-            
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            const playersCount = document.getElementById('playersCount');
-            
-            statusIndicator.className = 'status-indicator offline';
-            statusText.textContent = 'Offline';
-            playersCount.textContent = '0';
-            
-            // Здесь можно добавить код для реального выключения сервера
-            console.log('Сервер выключен администратором');
-        }
-        
-        // Защита от случайного закрытия панели
-        window.addEventListener('beforeunload', function(e) {
-            if (isAdmin) {
-                e.preventDefault();
-                e.returnValue = '';
+                statusIndicator.className = 'status-indicator offline';
+                statusText.textContent = 'Server is Offline';
             }
         });
     </script>
