@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work a Pizza Place - Roblox Server</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
             font-family: Arial, sans-serif;
             background-color: #808080;
-            background-image: url('https://github.com/prosasha/prosasha.github.io/blob/main/Stud.png?raw=true'); /* Замените на вашу текстуру stud.png */
-            background-size: 50px 50px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4zwAEjP8RgCHCMDMzQ4QZGBj+M8IJM0JpZkY4YYYIAAATYgQc/ZhC+AAAAABJRU5ErkJggg==');
+            background-size: 100px 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,63 +23,121 @@
             min-height: 100vh;
             color: white;
             text-align: center;
+            padding: 20px;
         }
         
         .container {
             max-width: 800px;
+            width: 100%;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .icon {
             width: 200px;
             height: 200px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            object-fit: cover;
         }
         
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.8em;
+            margin-bottom: 40px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 0 10px;
         }
         
         .server-info {
-            border: 2px solid white;
-            padding: 20px;
+            border: 3px solid white;
+            padding: 25px;
             margin-top: 20px;
-            background-color: rgba(0, 0, 0, 0.3);
-            background-image: url('https://github.com/prosasha/prosasha.github.io/blob/main/Stud.png?raw=true'); /* Замените на вашу текстуру stud.png */
-            background-size: 50px 50px;
-            border-radius: 5px;
+            background-color: rgba(40, 40, 40, 0.7);
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4zwAEjP8RgCHCMDMzQ4QZGBj+M8IJM0JpZkY4YYYIAAATYgQc/ZhC+AAAAABJRU5ErkJggg==');
+            background-size: 100px 100px;
+            border-radius: 10px;
             text-align: left;
-            max-width: 500px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
         
         .server-info p {
-            margin: 10px 0;
-            font-size: 1.1em;
+            margin: 15px 0;
+            font-size: 1.2em;
+            line-height: 1.5;
         }
         
         .ip-address {
             font-weight: bold;
-            font-size: 1.2em;
-            margin: 15px 0;
+            font-size: 1.4em;
+            margin: 20px 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .version {
+            color: #a0d0ff;
+        }
+        
+        .players {
+            color: #90ee90;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .server-info p {
+                font-size: 1em;
+            }
+            
+            .icon {
+                width: 150px;
+                height: 150px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="Icon.jpg" alt="Work a Pizza Place Icon" class="icon">
+        <!-- Замените src на "Icon.jpg" после загрузки файла -->
+        <img src="https://via.placeholder.com/200/555555/ffffff?text=Icon.jpg" alt="Work a Pizza Place Icon" class="icon">
         <h1>Work a Pizza Place</h1>
         
         <div class="server-info">
             <p class="ip-address">Server IP Address: max-protocols.gl.at.ply.gg:46093</p>
-            <p>Client: 2010L</p>
-            <p>Map: 2010M - Work at a Pizza Place.rbxl</p>
-            <p>Players: 12</p>
-            <p>Version: Novetus Snapshot v25.9395.1</p>
+            <p><strong>Client:</strong> 2010L</p>
+            <p><strong>Map:</strong> 2010M - Work at a Pizza Place.rbxl</p>
+            <p class="players"><strong>Players:</strong> 12</p>
+            <p class="version"><strong>Version:</strong> Novetus Snapshot v25.9395.1</p>
         </div>
     </div>
+
+    <script>
+        // Простой скрипт для имитации изменения количества игроков
+        document.addEventListener('DOMContentLoaded', function() {
+            const playersElement = document.querySelector('.players');
+            let players = 12;
+            
+            setInterval(() => {
+                // Случайное изменение количества игроков от 8 до 16
+                players = 8 + Math.floor(Math.random() * 9);
+                playersElement.innerHTML = `<strong>Players:</strong> ${players}`;
+            }, 10000); // Обновление каждые 10 секунд
+        });
+    </script>
 </body>
 </html>
