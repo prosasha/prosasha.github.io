@@ -114,96 +114,35 @@
             box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
         }
         
-        .login-section {
-            border: 4px solid #333;
+        .admin-link {
+            border: 4px solid #ff0000;
             padding: 20px;
             margin-top: 30px;
             background-color: rgba(0, 0, 0, 0.6);
             max-width: 500px;
         }
         
-        .auth-btn {
+        .admin-btn {
             font-family: 'Comic Sans MS', 'ComicSans', cursive;
-            background-color: #333;
+            background-color: #ff0000;
             color: white;
             border: 3px solid #fff;
-            padding: 12px 24px;
+            padding: 15px 30px;
             margin: 10px;
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1.2em;
             font-weight: bold;
             text-shadow: 1px 1px 0 #000;
             box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
             transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
         
-        .auth-btn:hover {
+        .admin-btn:hover {
             transform: translate(2px, 2px);
             box-shadow: 1px 1px 0 rgba(0,0,0,0.5);
-            background-color: #555;
-        }
-        
-        .admin-panel {
-            border: 4px solid #ff0000;
-            padding: 20px;
-            margin-top: 30px;
-            background-color: rgba(0, 0, 0, 0.7);
-            max-width: 500px;
-        }
-        
-        .status-btn {
-            font-family: 'Comic Sans MS', 'ComicSans', cursive;
-            background-color: #ffff00;
-            color: #000;
-            border: 3px solid #000;
-            padding: 12px 24px;
-            margin: 5px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
-            transition: all 0.2s;
-        }
-        
-        .status-btn:hover {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0 rgba(0,0,0,0.5);
-        }
-        
-        .online-btn {
-            background-color: #00ff00;
-        }
-        
-        .offline-btn {
-            background-color: #ff0000;
-            color: white;
-        }
-        
-        .admin-input {
-            font-family: 'Comic Sans MS', 'ComicSans', cursive;
-            padding: 8px;
-            margin: 10px;
-            border: 2px solid #ffff00;
-            background-color: #000;
-            color: white;
-            width: 200px;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .user-info {
-            color: #ffff00;
-            margin: 10px 0;
-            font-size: 1.1em;
-        }
-        
-        .session-info {
-            color: #cccccc;
-            font-size: 0.8em;
-            margin-top: 10px;
+            background-color: #ff3333;
         }
         
         @keyframes pulse-online {
@@ -253,28 +192,9 @@
             <p id="lastUpdate">Last updated: <span id="updateTime">Just now</span></p>
         </div>
 
-        <div class="login-section" id="loginSection">
-            <h3 style="color: #fff; margin-top: 0;">Login</h3>
-            <input type="text" class="admin-input" id="username" placeholder="Enter username">
-            <br>
-            <button class="auth-btn" onclick="login()">🔐 LOGIN</button>
-            <div id="loginMessage" class="session-info"></div>
-        </div>
-
-        <div class="admin-panel hidden" id="adminPanel">
-            <h3 style="color: #ff0000; margin-top: 0;">ADMIN CONTROL PANEL</h3>
-            <div class="user-info" id="userInfo"></div>
-            <div>
-                <button class="status-btn online-btn" onclick="setServerStatus(true)">🟢 SET SERVER ONLINE</button>
-                <button class="status-btn offline-btn" onclick="setServerStatus(false)">🔴 SET SERVER OFFLINE</button>
-            </div>
-            <div style="margin-top: 15px;">
-                <input type="number" class="admin-input" id="playerCount" min="0" max="12" value="0" 
-                       onchange="updatePlayerCount()" placeholder="Player count">
-                <span style="color: #ffff00;">/12 players</span>
-            </div>
-            <button class="auth-btn" onclick="logout()" style="margin-top: 15px;">🚪 LOGOUT</button>
-            <div class="session-info" id="sessionInfo"></div>
+        <div class="admin-link">
+            <h3 style="color: #fff; margin-top: 0;">ADMIN ACCESS</h3>
+            <a href="admin.html" class="admin-btn">🔧 OPEN ADMIN PANEL</a>
         </div>
     </div>
 
@@ -286,18 +206,6 @@
             lastUpdated: new Date().toLocaleString()
         };
 
-        // Only this username can access admin panel
-        const ADMIN_USERNAME = "prosasha";
-        
-        // Single session management
-        let currentUser = null;
-        let sessionId = null;
-
-        // Generate unique session ID
-        function generateSessionId() {
-            return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
-        }
-
         // Load status from localStorage
         function loadServerStatus() {
             const saved = localStorage.getItem('pizzaServerStatus');
@@ -305,138 +213,6 @@
                 serverStatus = JSON.parse(saved);
             }
             updateDisplay();
-        }
-
-        // Save status to localStorage so all users see the same status
-        function saveServerStatus() {
-            serverStatus.lastUpdated = new Date().toLocaleString();
-            localStorage.setItem('pizzaServerStatus', JSON.stringify(serverStatus));
-            updateDisplay();
-        }
-
-        // Check if there's an active session
-        function checkActiveSession() {
-            const activeSession = localStorage.getItem('pizzaServerActiveSession');
-            
-            if (activeSession) {
-                const sessionData = JSON.parse(activeSession);
-                
-                // Check if session is still valid (24 hours)
-                const sessionAge = Date.now() - sessionData.loginTime;
-                const maxSessionAge = 24 * 60 * 60 * 1000; // 24 hours
-                
-                if (sessionAge < maxSessionAge) {
-                    // Session is active, show message
-                    document.getElementById('loginMessage').textContent = 
-                        'Admin is currently logged in. Only one user can be logged in at a time.';
-                    return true;
-                } else {
-                    // Session expired, clear it
-                    localStorage.removeItem('pizzaServerActiveSession');
-                    localStorage.removeItem('pizzaServerUser');
-                }
-            }
-            
-            return false;
-        }
-
-        // Check if user is logged in
-        function checkUserSession() {
-            const activeSession = localStorage.getItem('pizzaServerActiveSession');
-            const savedUser = localStorage.getItem('pizzaServerUser');
-            
-            if (activeSession && savedUser) {
-                const sessionData = JSON.parse(activeSession);
-                const userData = JSON.parse(savedUser);
-                
-                // Check if session is still valid
-                const sessionAge = Date.now() - sessionData.loginTime;
-                const maxSessionAge = 24 * 60 * 60 * 1000; // 24 hours
-                
-                if (sessionAge < maxSessionAge) {
-                    currentUser = userData;
-                    sessionId = sessionData.sessionId;
-                    showAdminPanel();
-                    updateSessionInfo();
-                    return true;
-                } else {
-                    // Session expired
-                    logout();
-                }
-            }
-            
-            return false;
-        }
-
-        // Simple login with single session
-        function login() {
-            const username = document.getElementById('username').value.trim();
-            
-            if (!username) {
-                return;
-            }
-
-            // Check if someone is already logged in
-            if (checkActiveSession()) {
-                document.getElementById('loginMessage').textContent = 
-                    'Admin is currently logged in. Only one user can be logged in at a time.';
-                return;
-            }
-
-            // Check if username is the admin
-            if (username.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
-                // Create new session
-                sessionId = generateSessionId();
-                currentUser = {
-                    username: username,
-                    isAdmin: true,
-                    loginTime: new Date().toLocaleString()
-                };
-                
-                // Save session to localStorage
-                const sessionData = {
-                    sessionId: sessionId,
-                    loginTime: Date.now(),
-                    username: username
-                };
-                
-                localStorage.setItem('pizzaServerActiveSession', JSON.stringify(sessionData));
-                localStorage.setItem('pizzaServerUser', JSON.stringify(currentUser));
-                
-                showAdminPanel();
-                updateSessionInfo();
-                document.getElementById('loginMessage').textContent = '';
-            }
-        }
-
-        function showAdminPanel() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            document.getElementById('userInfo').innerHTML = 
-                `👤 Logged in as: <strong>${currentUser.username}</strong>`;
-        }
-
-        function logout() {
-            // Clear session
-            localStorage.removeItem('pizzaServerActiveSession');
-            localStorage.removeItem('pizzaServerUser');
-            
-            currentUser = null;
-            sessionId = null;
-            
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('username').value = '';
-            document.getElementById('loginMessage').textContent = '';
-        }
-
-        function updateSessionInfo() {
-            if (currentUser && sessionId) {
-                const sessionData = JSON.parse(localStorage.getItem('pizzaServerActiveSession'));
-                const loginTime = new Date(sessionData.loginTime).toLocaleString();
-                document.getElementById('sessionInfo').textContent = 
-                    `Session started: ${loginTime}`;
-            }
         }
 
         function updateDisplay() {
@@ -458,31 +234,6 @@
             }
             
             updateTime.textContent = serverStatus.lastUpdated;
-            document.getElementById('playerCount').value = serverStatus.players;
-        }
-
-        function setServerStatus(isOnline) {
-            if (!currentUser || !currentUser.isAdmin) {
-                return;
-            }
-            
-            serverStatus.online = isOnline;
-            if (!isOnline) {
-                serverStatus.players = 0;
-            }
-            saveServerStatus();
-        }
-
-        function updatePlayerCount() {
-            if (!currentUser || !currentUser.isAdmin) {
-                return;
-            }
-            
-            const count = parseInt(document.getElementById('playerCount').value) || 0;
-            if (count >= 0 && count <= 12) {
-                serverStatus.players = count;
-                saveServerStatus();
-            }
         }
 
         // Auto-refresh status every 10 seconds
@@ -493,16 +244,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadServerStatus();
-            checkActiveSession();
-            checkUserSession();
             startAutoRefresh();
-            
-            // Enter key support for login
-            document.getElementById('username').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    login();
-                }
-            });
         });
     </script>
 </body>
