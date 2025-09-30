@@ -114,7 +114,7 @@
             box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
         }
         
-        .github-auth {
+        .login-section {
             border: 4px solid #333;
             padding: 20px;
             margin-top: 30px;
@@ -200,6 +200,15 @@
             font-size: 1.1em;
         }
         
+        .error-message {
+            color: #ff0000;
+            margin: 10px 0;
+            font-size: 1.1em;
+            background-color: rgba(255, 0, 0, 0.2);
+            padding: 10px;
+            border: 1px solid #ff0000;
+        }
+        
         @keyframes pulse-online {
             0% { box-shadow: 0 0 15px #00ff00, 0 0 5px #00ff00; }
             50% { box-shadow: 0 0 20px #00ff00, 0 0 10px #00ff00; }
@@ -247,12 +256,13 @@
             <p id="lastUpdate">Last updated: <span id="updateTime">Just now</span></p>
         </div>
 
-        <div class="github-auth" id="githubAuth">
-            <h3 style="color: #fff; margin-top: 0;">GITHUB LOGIN</h3>
-            <p>Login with your GitHub username to access admin panel</p>
-            <input type="text" class="admin-input" id="githubUsername" placeholder="Enter GitHub username">
+        <div class="login-section" id="loginSection">
+            <h3 style="color: #fff; margin-top: 0;">LOGIN</h3>
+            <p>Enter username to access admin panel</p>
+            <input type="text" class="admin-input" id="username" placeholder="Enter username">
             <br>
-            <button class="auth-btn" onclick="loginWithGitHub()">🔐 LOGIN WITH GITHUB</button>
+            <button class="auth-btn" onclick="login()">🔐 LOGIN</button>
+            <div id="loginError" class="error-message hidden"></div>
         </div>
 
         <div class="admin-panel hidden" id="adminPanel">
@@ -279,7 +289,8 @@
             lastUpdated: new Date().toLocaleString()
         };
 
-        // Current user session
+        // Only this username can access admin panel
+        const ADMIN_USERNAME = "prosasha";
         let currentUser = null;
 
         // Load status from localStorage
@@ -298,7 +309,7 @@
             updateDisplay();
         }
 
-        // Check if user is logged in and is admin
+        // Check if user is logged in
         function checkUserSession() {
             const savedUser = localStorage.getItem('pizzaServerUser');
             if (savedUser) {
@@ -307,59 +318,56 @@
             }
         }
 
-        // GitHub login simulation
-        function loginWithGitHub() {
-            const username = document.getElementById('githubUsername').value.trim();
+        // Simple login with username only
+        function login() {
+            const username = document.getElementById('username').value.trim();
             
             if (!username) {
-                alert('Please enter your GitHub username!');
+                showError('Please enter a username!');
                 return;
             }
 
-            // Simulate GitHub API call
-            simulateGitHubAuth(username);
-        }
-
-        function simulateGitHubAuth(username) {
-            // In a real implementation, you would use GitHub OAuth here
-            // For simulation, we'll just check if the username is "prosasha"
-            
-            const user = {
-                username: username,
-                isAdmin: username.toLowerCase() === 'prosasha',
-                loginTime: new Date().toLocaleString()
-            };
-
-            currentUser = user;
-            localStorage.setItem('pizzaServerUser', JSON.stringify(user));
-            showAdminPanel();
+            // Check if username is the admin
+            if (username.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
+                currentUser = {
+                    username: username,
+                    isAdmin: true,
+                    loginTime: new Date().toLocaleString()
+                };
+                
+                localStorage.setItem('pizzaServerUser', JSON.stringify(currentUser));
+                showAdminPanel();
+                hideError();
+            } else {
+                showError('Only user "' + ADMIN_USERNAME + '" can access admin panel!');
+            }
         }
 
         function showAdminPanel() {
-            if (currentUser && currentUser.isAdmin) {
-                document.getElementById('githubAuth').classList.add('hidden');
-                document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('userInfo').innerHTML = 
-                    `👤 Logged in as: <strong>${currentUser.username}</strong> (ADMIN)`;
-            } else if (currentUser) {
-                document.getElementById('githubAuth').classList.add('hidden');
-                document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('userInfo').innerHTML = 
-                    `👤 Logged in as: <strong>${currentUser.username}</strong> (Regular User)`;
-                // Hide admin controls for non-admin users
-                document.querySelectorAll('.status-btn').forEach(btn => {
-                    btn.style.display = 'none';
-                });
-                document.getElementById('playerCount').style.display = 'none';
-            }
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            document.getElementById('userInfo').innerHTML = 
+                `👤 Logged in as: <strong>${currentUser.username}</strong>`;
         }
 
         function logout() {
             currentUser = null;
             localStorage.removeItem('pizzaServerUser');
-            document.getElementById('githubAuth').classList.remove('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('githubUsername').value = '';
+            document.getElementById('username').value = '';
+            hideError();
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.classList.add('hidden');
         }
 
         function updateDisplay() {
@@ -420,6 +428,13 @@
             loadServerStatus();
             checkUserSession();
             startAutoRefresh();
+            
+            // Enter key support for login
+            document.getElementById('username').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
         });
     </script>
 </body>
