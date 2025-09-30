@@ -181,97 +181,9 @@
             <p class="ip-address">Server IP: max-protocols.gl.at.ply.gg:46093</p>
             <p><strong>Client:</strong> 2010L</p>
             <p><strong>Map:</strong> 2010M - Work at a Pizza Place.rbxl</p>
+            <p><strong>Players:</strong>12</p>
             
-            <div class="player-control">
-                <p class="players-count">
-                    <strong>Players Online:</strong> 
-                    <span id="playersCount">12</span>/12
-                </p>
-                <div>
-                    <input type="number" class="player-input" id="playerInput" min="0" max="12" value="12" 
-                           placeholder="0-12">
-                    <button class="update-btn" onclick="updatePlayerCount()">UPDATE</button>
-                </div>
-                <p class="last-updated">Last updated: <span id="updateTime">Just now</span></p>
-            </div>
-            
-            <p class="version-info"><strong>Version:</strong> Novetus Snapshot v25.9395.1</p>
-        </div>
 
-        <div class="admin-link">
-            <h3 style="color: #fff; margin-top: 0;">ADMIN ACCESS</h3>
-            <a href="admin.html" class="admin-btn">🔧 OPEN ADMIN PANEL</a>
-        </div>
-    </div>
-
-    <script>
-        // Server status that persists for all users
-        let serverStatus = {
-            players: 12,
-            lastUpdated: new Date().toLocaleString()
-        };
-
-        // Load status from localStorage
-        function loadServerStatus() {
-            const saved = localStorage.getItem('pizzaServerStatus');
-            if (saved) {
-                const savedStatus = JSON.parse(saved);
-                serverStatus.players = savedStatus.players || 12;
-                serverStatus.lastUpdated = savedStatus.lastUpdated || new Date().toLocaleString();
-            }
-            updateDisplay();
-        }
-
-        // Save status to localStorage
-        function saveServerStatus() {
-            serverStatus.lastUpdated = new Date().toLocaleString();
-            localStorage.setItem('pizzaServerStatus', JSON.stringify(serverStatus));
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-            const playersCount = document.getElementById('playersCount');
-            const updateTime = document.getElementById('updateTime');
-            const playerInput = document.getElementById('playerInput');
-
-            playersCount.textContent = serverStatus.players;
-            updateTime.textContent = serverStatus.lastUpdated;
-            playerInput.value = serverStatus.players;
-        }
-
-        function updatePlayerCount() {
-            const count = parseInt(document.getElementById('playerInput').value) || 0;
-            if (count >= 0 && count <= 12) {
-                serverStatus.players = count;
-                saveServerStatus();
-                
-                // Visual feedback
-                document.body.style.filter = 'contrast(1.2) brightness(1.1)';
-                setTimeout(() => {
-                    document.body.style.filter = 'contrast(1.1) brightness(0.9)';
-                }, 300);
-            } else {
-                alert('Please enter a number between 0 and 12');
-            }
-        }
-
-        // Auto-refresh status every 10 seconds
-        function startAutoRefresh() {
-            setInterval(loadServerStatus, 10000);
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            loadServerStatus();
-            startAutoRefresh();
-            
-            // Enter key support for player input
-            document.getElementById('playerInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    updatePlayerCount();
-                }
-            });
-        });
     </script>
 </body>
 </html>
