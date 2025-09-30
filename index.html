@@ -173,6 +173,28 @@
             color: #cccccc;
             margin-top: 10px;
         }
+        
+        .admin-panel {
+            border: 4px solid #ff0000;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.7);
+            max-width: 500px;
+        }
+        
+        .admin-input {
+            font-family: 'Comic Sans MS', 'ComicSans', cursive;
+            padding: 8px;
+            margin: 10px;
+            border: 2px solid #ffff00;
+            background-color: #000;
+            color: white;
+            width: 200px;
+        }
+        
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -194,64 +216,94 @@
                 <span class="status-indicator offline" id="statusIndicator"></span>
                 <span id="statusText" style="font-weight: bold;">SERVER OFFLINE</span>
             </p>
-            
-            <div class="status-control">
-                <p style="margin-bottom: 15px; color: #ffff00;"><strong>Change Server Status:</strong></p>
-                <button class="status-btn online-btn" onclick="setServerOnline()">🟢 SET ONLINE</button>
-                <button class="status-btn offline-btn" onclick="setServerOffline()">🔴 SET OFFLINE</button>
+            <p id="lastUpdate">Last updated: <span id="updateTime">Just now</span></p>
+        </div>
+
+        <div class="admin-panel" id="adminPanel">
+            <h3 style="color: #ff0000; margin-top: 0;">ADMIN CONTROL PANEL</h3>
+            <div>
+                <button class="status-btn online-btn" onclick="setServerStatus(true)">🟢 SET SERVER ONLINE</button>
+                <button class="status-btn offline-btn" onclick="setServerStatus(false)">🔴 SET SERVER OFFLINE</button>
+            </div>
+            <div style="margin-top: 15px;">
+                <input type="number" class="admin-input" id="playerCount" min="0" max="12" value="0" 
+                       onchange="updatePlayerCount()" placeholder="Player count">
+                <span style="color: #ffff00;">/12 players</span>
             </div>
         </div>
     </div>
 
     <script>
-        let serverOnline = false;
-        let playerCount = 0;
-        
+        // Server status that persists for all users
+        let serverStatus = {
+            online: false,
+            players: 0,
+            lastUpdated: new Date().toLocaleString()
+        };
+
+        // Load status from localStorage or use default
+        function loadServerStatus() {
+            const saved = localStorage.getItem('pizzaServerStatus');
+            if (saved) {
+                serverStatus = JSON.parse(saved);
+            }
+            updateDisplay();
+        }
+
+        // Save status to localStorage so all users see the same status
+        function saveServerStatus() {
+            serverStatus.lastUpdated = new Date().toLocaleString();
+            localStorage.setItem('pizzaServerStatus', JSON.stringify(serverStatus));
+            updateDisplay();
+        }
+
         function updateDisplay() {
             const statusIndicator = document.getElementById('statusIndicator');
             const statusText = document.getElementById('statusText');
             const playersCount = document.getElementById('playersCount');
-            
-            if (serverOnline) {
+            const updateTime = document.getElementById('updateTime');
+
+            if (serverStatus.online) {
                 statusIndicator.className = 'status-indicator online';
                 statusText.textContent = 'SERVER ONLINE';
                 statusText.style.color = '#00ff00';
-                playersCount.textContent = playerCount;
+                playersCount.textContent = serverStatus.players;
             } else {
                 statusIndicator.className = 'status-indicator offline';
                 statusText.textContent = 'SERVER OFFLINE';
                 statusText.style.color = '#ff0000';
                 playersCount.textContent = '0';
             }
-        }
-        
-        function setServerOnline() {
-            serverOnline = true;
-            playerCount = Math.floor(Math.random() * 5) + 8; // Random players between 8-12
-            updateDisplay();
             
-            // Add some "retro" effect
-            document.body.style.filter = 'contrast(1.2) brightness(1.1)';
-            setTimeout(() => {
-                document.body.style.filter = 'contrast(1.1) brightness(0.9)';
-            }, 200);
+            updateTime.textContent = serverStatus.lastUpdated;
         }
-        
-        function setServerOffline() {
-            serverOnline = false;
-            playerCount = 0;
-            updateDisplay();
-            
-            // Add some "retro" effect
-            document.body.style.filter = 'contrast(0.9) brightness(0.8)';
-            setTimeout(() => {
-                document.body.style.filter = 'contrast(1.1) brightness(0.9)';
-            }, 200);
+
+        function setServerStatus(isOnline) {
+            serverStatus.online = isOnline;
+            if (!isOnline) {
+                serverStatus.players = 0;
+                document.getElementById('playerCount').value = 0;
+            }
+            saveServerStatus();
         }
-        
-        // Initialize display
+
+        function updatePlayerCount() {
+            const count = parseInt(document.getElementById('playerCount').value) || 0;
+            if (count >= 0 && count <= 12) {
+                serverStatus.players = count;
+                saveServerStatus();
+            }
+        }
+
+        // Auto-refresh status every 10 seconds to show updates from other users
+        function startAutoRefresh() {
+            setInterval(loadServerStatus, 10000);
+        }
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            updateDisplay();
+            loadServerStatus();
+            startAutoRefresh();
         });
     </script>
 </body>
