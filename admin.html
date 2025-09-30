@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Work a Pizza Place</title>
+    <title>Admin Panel</title>
     <style>
         @font-face {
             font-family: 'ComicSans';
@@ -191,9 +191,6 @@
                 <p style="font-size: 1.3em;">
                     <span class="status-indicator offline" id="statusIndicator"></span>
                     <span id="statusText" style="font-weight: bold;">SERVER OFFLINE</span>
-                </p>
-                <p>Players Online: <span id="playersCount" style="color: #ffff00; font-weight: bold;">0</span>/12</p>
-                <p class="session-info">Last updated: <span id="updateTime">Just now</span></p>
             </div>
             
             <div class="status-control">
@@ -236,7 +233,6 @@
         function updateDisplay() {
             const statusIndicator = document.getElementById('statusIndicator');
             const statusText = document.getElementById('statusText');
-            const playersCount = document.getElementById('playersCount');
             const updateTime = document.getElementById('updateTime');
 
             if (serverStatus.online) {
