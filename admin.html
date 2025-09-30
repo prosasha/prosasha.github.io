@@ -172,6 +172,17 @@
             font-size: 0.9em;
             margin-top: 10px;
         }
+        
+        .json-status {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px dashed #ffff00;
+            border-radius: 8px;
+            font-family: monospace;
+            text-align: left;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -191,6 +202,18 @@
                 <p style="font-size: 1.3em;">
                     <span class="status-indicator offline" id="statusIndicator"></span>
                     <span id="statusText" style="font-weight: bold;">SERVER OFFLINE</span>
+                </p>
+                <p>Players Online: <span id="playersCount" style="color: #ffff00; font-weight: bold;">0</span>/12</p>
+                <p class="session-info">Last updated: <span id="updateTime">Just now</span></p>
+            </div>
+
+            <div class="json-status">
+                <h4 style="color: #ffff00; margin: 0 0 10px 0;">SERVER.JSON STATUS:</h4>
+                <pre id="jsonOutput">{
+  "server_online": false,
+  "players": 0,
+  "last_updated": "Just now"
+}</pre>
             </div>
             
             <div class="status-control">
@@ -198,6 +221,7 @@
                 <button class="status-btn online-btn" onclick="setServerStatus(true)">🟢 START SERVER</button>
                 <button class="status-btn offline-btn" onclick="setServerStatus(false)">🔴 STOP SERVER</button>
             </div>
+            
             <div class="session-info" id="sessionInfo">
                 Session started: <span id="sessionTime">Just now</span>
             </div>
@@ -228,11 +252,13 @@
             serverStatus.lastUpdated = new Date().toLocaleString();
             localStorage.setItem('pizzaServerStatus', JSON.stringify(serverStatus));
             updateDisplay();
+            updateJSONFile();
         }
 
         function updateDisplay() {
             const statusIndicator = document.getElementById('statusIndicator');
             const statusText = document.getElementById('statusText');
+            const playersCount = document.getElementById('playersCount');
             const updateTime = document.getElementById('updateTime');
 
             if (serverStatus.online) {
@@ -248,7 +274,48 @@
             }
             
             updateTime.textContent = serverStatus.lastUpdated;
-            document.getElementById('playerCount').value = serverStatus.players;
+        }
+
+        // Update JSON file content display
+        function updateJSONFile() {
+            const jsonOutput = document.getElementById('jsonOutput');
+            const jsonData = {
+                server_online: serverStatus.online,
+                players: serverStatus.players,
+                last_updated: serverStatus.lastUpdated,
+                server_info: {
+                    ip: "max-protocols.gl.at.ply.gg:46093",
+                    client: "2010L",
+                    map: "2010M - Work at a Pizza Place.rbxl",
+                    version: "Novetus Snapshot v25.9395.1",
+                    max_players: 12
+                }
+            };
+            
+            jsonOutput.textContent = JSON.stringify(jsonData, null, 2);
+            
+            // Create downloadable JSON file
+            createDownloadableJSON(jsonData);
+        }
+
+        // Create downloadable JSON file
+        function createDownloadableJSON(jsonData) {
+            const dataStr = JSON.stringify(jsonData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            // For demonstration, we'll just show the JSON content
+            // In a real implementation, you would upload this to a server
+            console.log('server.json content:', dataStr);
+            
+            // If you want to create a download link, uncomment this:
+            /*
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.getElementById('downloadLink');
+            if (link) {
+                link.href = url;
+                link.download = 'server.json';
+            }
+            */
         }
 
         function setServerStatus(isOnline) {
@@ -272,14 +339,6 @@
             }
         }
 
-        function updatePlayerCount() {
-            const count = parseInt(document.getElementById('playerCount').value) || 0;
-            if (count >= 0 && count <= 12) {
-                serverStatus.players = count;
-                saveServerStatus();
-            }
-        }
-
         // Update session time
         function updateSessionInfo() {
             const sessionTime = new Date().toLocaleString();
@@ -295,11 +354,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadServerStatus();
             updateSessionInfo();
+            updateJSONFile();
             startAutoRefresh();
             
             // Update session time every minute
             setInterval(updateSessionInfo, 60000);
         });
+
+        // If you want to add a download button, add this HTML:
+        // <a href="#" id="downloadLink" class="back-btn" style="background-color: #2196F3;">📥 DOWNLOAD server.json</a>
     </script>
 </body>
 </html>
