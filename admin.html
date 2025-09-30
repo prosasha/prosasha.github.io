@@ -201,18 +201,6 @@
                 <button class="status-btn online-btn" onclick="setServerStatus(true)">🟢 START SERVER</button>
                 <button class="status-btn offline-btn" onclick="setServerStatus(false)">🔴 STOP SERVER</button>
             </div>
-            
-            <div class="player-control">
-                <h3 style="color: #ffff00; margin: 0 0 15px 0;">PLAYER MANAGEMENT</h3>
-                <label for="playerCount" style="color: white;">Set Player Count:</label>
-                <br>
-                <input type="number" class="admin-input" id="playerCount" min="0" max="12" value="0" 
-                       onchange="updatePlayerCount()">
-                <span style="color: #ffff00; font-size: 1.2em;">/12 players</span>
-                <br>
-                <button class="status-btn" onclick="updatePlayerCount()" style="margin-top: 10px;">UPDATE PLAYERS</button>
-            </div>
-            
             <div class="session-info" id="sessionInfo">
                 Session started: <span id="sessionTime">Just now</span>
             </div>
